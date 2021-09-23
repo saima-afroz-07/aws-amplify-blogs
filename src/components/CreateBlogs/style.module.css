@@ -1,0 +1,26 @@
+.input-css {
+    padding: 20px;
+    background-color: lightcoral;
+    border-radius: 5px;
+}
+
+.btn {
+    color: white !important;
+}
+
+.form-css {
+    margin: auto;
+}
+
+@media (min-width: 320px) {
+    .form-css {
+        min-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .form-css {
+        min-width: 50%;
+        max-width: 50%;
+    }
+}

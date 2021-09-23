@@ -1,0 +1,70 @@
+.home-page-css {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-css {
+    margin: 10px;
+    width: 230px;
+    padding: 5px;
+}
+
+.card-subtitle-css {
+    font-size: 13px !important;
+    color: lightcoral;
+}
+
+.btn {
+    border: 1px solid lightcoral !important;
+    background-color: white !important;
+    color: lightcoral !important;
+}
+
+.btn:hover, .btn:focus {
+    outline: none;
+    background-color: lightcoral !important;
+    color: white !important;
+}
+
+
+.dropdown-css {
+    top: 0;
+    right: 0;
+    position: absolute !important;
+}
+
+.dd-toggle-btn {
+    background-color: white !important;
+    border: none !important;
+    color: lightcoral !important;
+}
+
+.dd-toggle-btn::after {
+    display: none !important;
+}
+
+.delete-btn {
+    border: none;
+    background-color: transparent;
+    padding: 0px;
+}
+
+@media (min-width: 320px) {
+    .card-section {
+        display: grid;
+        justify-content: space-around;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-section {
+        display: flex;
+        justify-content: flex-start;
+    }
+}

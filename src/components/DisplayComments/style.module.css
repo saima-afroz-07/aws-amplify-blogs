@@ -1,0 +1,26 @@
+.card-css {
+    margin: 10px 0px;
+}
+
+
+.dropdown-css {
+    top: 0;
+    right: 0;
+    position: absolute !important;
+}
+
+.dd-toggle-btn {
+    background-color: white !important;
+    border: none !important;
+    color: lightcoral !important;
+}
+
+.dd-toggle-btn::after {
+    display: none !important;
+}
+
+.delete-btn {
+    border: none;
+    background-color: transparent;
+    padding: 0px;
+}
