@@ -1,18 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import {API, graphqlOperation} from 'aws-amplify';
-import {Card, Button, Dropdown, Modal} from 'react-bootstrap';
+import {Card, Button, Dropdown, Modal, InputGroup, FormControl} from 'react-bootstrap';
 import {Link, BrowserRouter as Router, Route} from 'react-router-dom'
 
 import {listBlogs} from '../../graphql/queries';
-import {onCreateBlog, onDeleteBlog} from '../../graphql/subscriptions'
+import {onCreateBlog, onDeleteBlog, onUpdateBlog} from '../../graphql/subscriptions'
 import style from './style.module.css'
 import CreateBlogs from '../CreateBlogs/CreateBlogs';
 import {HiDotsVertical} from 'react-icons/hi'
-import { deleteBlog } from '../../graphql/mutations';
+import { deleteBlog, updateBlog } from '../../graphql/mutations';
+import {AiOutlineEdit} from 'react-icons/ai';
+import EditForm from '../EditForm/EditForm';
 
 function DisplayBlogs(props) {
     const [blogs, setBlogs] = useState([]);
-    // const [modalShow, setModalShow] = useState(false);
+    const [show, setShow] = useState(false);
+
+    const [formData, setFormData] = useState({
+      id: "",
+      name: ""
+    })
+
+    const handleClose = () => setShow(false);
+
+    const handleShow = (BlogItem) => {
+      setShow(true);
+      console.log('edit started', BlogItem.name, BlogItem.id);
+      setFormData({
+        id: BlogItem.id,
+        name: BlogItem.name
+      });
+
+    };
+
+    
 
     const getBlogs = async () => {
         const result = await API.graphql(graphqlOperation(listBlogs));
@@ -21,13 +42,33 @@ function DisplayBlogs(props) {
     }
 
     const handleDeleteBlog = async (BlogID) => {
-        // setModalShow(true);
         const input = {
             id: BlogID
         }
         // console.log(BlogID)
 
         await API.graphql(graphqlOperation(deleteBlog, {input}));
+    }
+
+    const handleChangeBlog = (event) => {
+      setFormData({
+        [event.target.name]: event.target.value,
+        id: formData.id
+      })
+    }
+
+    const onHandleUpdateBlog = async(event) => {
+      event.preventDefault();
+        const input = {
+          id: formData.id,
+          name: formData.name
+        }
+        console.log(input);
+
+        await API.graphql(graphqlOperation(updateBlog, {input}));
+
+        handleClose();
+
     }
     
 
@@ -56,12 +97,24 @@ function DisplayBlogs(props) {
                 setBlogs(updatedBlog)
                 console.log(deleteBlog)
             }
+        });
+
+        const updateBlogListener = API.graphql(graphqlOperation(onUpdateBlog)).subscribe({
+          next: postData => {
+            const myBlogs = blogs;
+            const updateBlog = postData.value.data.onUpdateBlog;
+            const index = myBlogs.findIndex(blog => blog.id === updateBlog.id);
+            const updatedBlogs = [...myBlogs.slice(0, index), updateBlog, ...myBlogs.slice(index + 1)];
+            console.log(updatedBlogs);
+            setBlogs(updatedBlogs);
+          }
         })
         
 
         return() => {
             createBlogListener.unsubscribe();
             deleteBlogListener.unsubscribe();
+            updateBlogListener.unsubscribe();
         }
 
     }, [blogs])
@@ -81,12 +134,19 @@ function DisplayBlogs(props) {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                        <Dropdown.Item href="#">Edit</Dropdown.Item>
+                        <Dropdown.Item href="#"><button className={style['edit-btn']} onClick={() => {handleShow(item)}}>Edit</button></Dropdown.Item>
                         <Dropdown.Item  href="#"><button className={style['delete-btn']} onClick={() => {handleDeleteBlog(item.id)}} >Delete</button></Dropdown.Item>
-                        {/* <MyVerticallyCenteredModal
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
-                        /> */}
+                        <EditForm
+                            show={show}
+                            onHide={handleClose}
+                            formData={formData}
+                            handleChangeItem={handleChangeBlog}
+                            handleClose={handleClose}
+                            onHandleUpdateItem={onHandleUpdateBlog}
+                            title="Blog"
+                            name='name'
+                            value={formData.name}
+                        />
                         </Dropdown.Menu>
                     </Dropdown>
                     <Card.Body>
@@ -107,32 +167,39 @@ function DisplayBlogs(props) {
     );
 }
 
-function MyVerticallyCenteredModal(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Centered Modal</h4>
-          <p>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+// function MyVerticallyCenteredModal({show, handleClose, formData, handleChangeBlog, onHandleUpdateBlog}) {
+//     return (
+//       <Modal show={show} onHide={handleClose}>
+//         <Modal.Header >
+//           <Modal.Title>Modal heading</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           <h5>Edit Blog's Title</h5>
+//           <InputGroup className={style['input-css']}>
+//               <InputGroup.Text id="basic-addon1"><AiOutlineEdit /></InputGroup.Text>
+//               <FormControl
+//               placeholder="Please Enter Blog's Name"
+//               name="name"
+//               aria-describedby="basic-addon1"
+//               required
+//               value={formData.name}
+//               onChange={handleChangeBlog}
+//               />
+//               {/* <Button type="submit"  className={style['btn']} variant="outline-secondary" id="button-addon2">
+//               Update
+//               </Button> */}
+//           </InputGroup>
+//         </Modal.Body>
+//         <Modal.Footer>
+//           <Button variant="secondary" onClick={handleClose}>
+//             Cancel
+//           </Button>
+//           <Button onClick={onHandleUpdateBlog} variant="primary">
+//             Save
+//           </Button>
+//         </Modal.Footer>
+//       </Modal>
+//     );
+//   }
 
 export default DisplayBlogs;
