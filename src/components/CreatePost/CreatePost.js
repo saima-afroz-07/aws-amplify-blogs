@@ -1,9 +1,9 @@
-import { createPost } from '../../graphql/mutations';
 import {API, graphqlOperation} from '@aws-amplify/api';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {FormControl, InputGroup, Button} from 'react-bootstrap';
 import {AiOutlineEdit} from 'react-icons/ai';
 
+import { createPost } from '../../graphql/mutations';
 import style from './style.module.css'
 
 

@@ -1,9 +1,9 @@
 import {API, graphqlOperation} from '@aws-amplify/api';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {FormControl, InputGroup, Button} from 'react-bootstrap';
 import {AiOutlineEdit} from 'react-icons/ai';
-import {createBlog} from '../../graphql/mutations';
 
+import {createBlog} from '../../graphql/mutations';
 import style from './style.module.css'
 
 function CreateBlogs(props) {
