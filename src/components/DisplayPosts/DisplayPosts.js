@@ -1,13 +1,13 @@
 import {API, graphqlOperation} from '@aws-amplify/api';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import {getBlog} from '../../graphql/queries';
-import CreatePost from '../CreatePost/CreatePost';
 import {Card, Dropdown} from 'react-bootstrap';
 import {HiDotsHorizontal} from 'react-icons/hi';
 
 import style from './style.module.css'
 import { onCreatePost, onDeletePost, onUpdatePost } from '../../graphql/subscriptions';
+import {getBlog} from '../../graphql/queries';
+import CreatePost from '../CreatePost/CreatePost';
 import { deletePost, updatePost } from '../../graphql/mutations';
 import CreateComments from '../CreateComments/CreateComments';
 import DisplayComments from '../DisplayComments/DisplayComments';
@@ -122,7 +122,7 @@ function DisplayPosts(props) {
         }
     }, [posts])
     return (
-        <div>
+        <div className={style["posts-page"]}>
             
             <CreatePost id={id}/>
             <h3>Posts</h3>

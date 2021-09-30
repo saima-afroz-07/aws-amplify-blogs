@@ -1,0 +1,67 @@
+.signup-page {
+    background: linear-gradient(90deg, #f0acac, #f08080);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh
+}
+
+.screen {
+    background-color: white;
+    position: relative;
+    height: 600px;
+    width: 360px;
+    box-shadow: 0px 0px 24px #854141;
+}
+
+.form-css {
+    padding: 15% 5% 5% 5%;
+}
+
+.form-heading {
+    padding-top: 20%;
+    color: #f08080;
+}
+
+.fp-css {
+    text-align: right;
+}
+
+a {
+    color: #f08080 !important;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #7e4141 !important;
+}
+
+.signup-btn {
+    margin-top: 10px;
+    padding: 5px 22px;
+    border: 1px solid lightcoral;
+    box-shadow: 0px 2px 2px lightcoral;
+    border-radius: 16px;
+    background-color: white;
+    width: 100%;
+}
+
+.go-to-signup {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    padding: 0px 5px 10px 19px;
+    color: darkgrey;
+}
+
+.resend-btn {
+    border: none;
+    background-color: transparent;
+    color: lightcoral;
+}

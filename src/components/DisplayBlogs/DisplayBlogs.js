@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import {API, graphqlOperation} from 'aws-amplify';
-import {Card, Button, Dropdown, Modal, InputGroup, FormControl} from 'react-bootstrap';
-import {Link, BrowserRouter as Router, Route} from 'react-router-dom'
+import {API, graphqlOperation, Auth} from 'aws-amplify';
+import {Card, Button, Dropdown} from 'react-bootstrap';
+import {Link, useHistory} from 'react-router-dom'
+import {HiDotsVertical} from 'react-icons/hi'
 
 import {listBlogs} from '../../graphql/queries';
 import {onCreateBlog, onDeleteBlog, onUpdateBlog} from '../../graphql/subscriptions'
 import style from './style.module.css'
 import CreateBlogs from '../CreateBlogs/CreateBlogs';
-import {HiDotsVertical} from 'react-icons/hi'
 import { deleteBlog, updateBlog } from '../../graphql/mutations';
-import {AiOutlineEdit} from 'react-icons/ai';
 import EditForm from '../EditForm/EditForm';
 
 function DisplayBlogs(props) {
     const [blogs, setBlogs] = useState([]);
     const [show, setShow] = useState(false);
+    const history = useHistory();
 
     const [formData, setFormData] = useState({
       id: "",
@@ -70,6 +70,16 @@ function DisplayBlogs(props) {
         handleClose();
 
     }
+
+    const logout = async() => {
+      try {
+        await Auth.signOut();
+        history.push('/login')
+      } catch (err) {
+        console.log('error => ', err)
+      }
+      
+    }
     
 
     useEffect(() => {
@@ -77,6 +87,12 @@ function DisplayBlogs(props) {
     }, [])
 
     useEffect(() => {
+
+        Auth.currentUserInfo().then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
 
         const createBlogListener = API.graphql(graphqlOperation(onCreateBlog)).subscribe({
             next: postData => {
@@ -123,7 +139,7 @@ function DisplayBlogs(props) {
         <div className={style['home-page-css']}>
             <CreateBlogs />
             <h2>Blogs</h2>
-            
+            <button className={style["logout-btn"]} onClick={logout}>Logout</button>
             <div className={style['card-section']}>
             {blogs.map(item => {
                 return (

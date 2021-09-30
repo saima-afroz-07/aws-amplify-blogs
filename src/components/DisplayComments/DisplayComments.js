@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getPost } from '../../graphql/queries';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import {Card, Dropdown} from 'react-bootstrap';
-import { onCreateComment, onDeleteComment, onUpdateComment } from '../../graphql/subscriptions';
 import {HiDotsHorizontal} from 'react-icons/hi';
 
 
 import style from './style.module.css'
+import { getPost } from '../../graphql/queries';
+import { onCreateComment, onDeleteComment, onUpdateComment } from '../../graphql/subscriptions';
 import { deleteComment, updateComment } from '../../graphql/mutations';
 import EditForm from '../EditForm/EditForm';
 
